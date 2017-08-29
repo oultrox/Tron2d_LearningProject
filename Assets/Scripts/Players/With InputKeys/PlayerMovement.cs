@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private KeyCode leftKey;
     [SerializeField] private float speed = 16;
     [SerializeField] private GameObject wallPrefab;
+
     private Collider2D wall;
     private Vector2 lastWallEnd;
     private Vector3 direction;
@@ -32,28 +33,37 @@ public class PlayerMovement : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        // Check for key presses
-        if (Input.GetKeyDown(upKey))
+        if (GameControl.instance.GameControlState != GameControl.GameState.playing)
         {
-            rgBody.velocity = Vector2.up * speed;
-            SpawnWall();
+            rgBody.velocity = Vector2.zero;
+           
         }
-        else if (Input.GetKeyDown(downKey))
+        else
         {
-            rgBody.velocity = -Vector2.up * speed;
-            SpawnWall();
+            // Check for key presses
+            if (Input.GetKeyDown(upKey))
+            {
+                rgBody.velocity = Vector2.up * speed;
+                SpawnWall();
+            }
+            else if (Input.GetKeyDown(downKey))
+            {
+                rgBody.velocity = -Vector2.up * speed;
+                SpawnWall();
+            }
+            else if (Input.GetKeyDown(rightKey))
+            {
+                rgBody.velocity = Vector2.right * speed;
+                SpawnWall();
+            }
+            else if (Input.GetKeyDown(leftKey))
+            {
+                rgBody.velocity = -Vector2.right * speed;
+                SpawnWall();
+            }
+            FitColliderBetween(wall, lastWallEnd, transform.position);
         }
-        else if (Input.GetKeyDown(rightKey))
-        {
-            rgBody.velocity = Vector2.right * speed;
-            SpawnWall();
-        }
-        else if (Input.GetKeyDown(leftKey))
-        {
-            rgBody.velocity = -Vector2.right * speed;
-            SpawnWall();
-        }
-        FitColliderBetween(wall, lastWallEnd, transform.position);
+        
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -62,6 +72,7 @@ public class PlayerMovement : MonoBehaviour {
         {
             Debug.Log("Player lost: " + name);
             Destroy(gameObject);
+            GameControl.instance.Restart();
         }
     }
     //-----Custom methods-------
