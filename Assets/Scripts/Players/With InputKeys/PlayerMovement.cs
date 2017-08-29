@@ -41,22 +41,22 @@ public class PlayerMovement : MonoBehaviour {
         else
         {
             // Check for key presses
-            if (Input.GetKeyDown(upKey))
+            if (Input.GetKeyDown(upKey) && rgBody.velocity.normalized != Vector2.down)
             {
                 rgBody.velocity = Vector2.up * speed;
                 SpawnWall();
             }
-            else if (Input.GetKeyDown(downKey))
+            else if (Input.GetKeyDown(downKey) && rgBody.velocity.normalized != Vector2.up)
             {
                 rgBody.velocity = -Vector2.up * speed;
                 SpawnWall();
             }
-            else if (Input.GetKeyDown(rightKey))
+            else if (Input.GetKeyDown(rightKey) && rgBody.velocity.normalized != Vector2.left)
             {
                 rgBody.velocity = Vector2.right * speed;
                 SpawnWall();
             }
-            else if (Input.GetKeyDown(leftKey))
+            else if (Input.GetKeyDown(leftKey) && rgBody.velocity.normalized != Vector2.right)
             {
                 rgBody.velocity = -Vector2.right * speed;
                 SpawnWall();
